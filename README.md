@@ -77,21 +77,6 @@ Each CV is scored across 6 dimensions with role-specific weights:
 
 ---
 
-## Python NLP API
-
-The optional Python backend exposes 5 REST endpoints on `http://localhost:5000`:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/health` | Liveness check — `{status, nlp_ready}` |
-| `GET` | `/api/roles` | Available role profiles + scoring weights |
-| `POST` | `/api/parse` | Extract + parse CV (multipart: `cv_file`) |
-| `POST` | `/api/analyze` | Full pipeline (multipart: `cv_file`, `target_role`, `github_url?`) |
-| `POST` | `/api/github` | GitHub profile analysis (JSON: `{github_url}`) |
-
-
----
-
 ## Supported Roles
 
 | Role | Key Skills |
@@ -102,26 +87,3 @@ The optional Python backend exposes 5 REST endpoints on `http://localhost:5000`:
 | **Business Analyst** | Requirements Gathering, JIRA, Stakeholder Management, BPMN, Gap Analysis |
 
 ---
-
-## Adding a New Role
-
-1. Add a new entry to `data/role_profiles.json` following the existing schema
-2. Add a matching `<option>` to the `#roleSelect` dropdown in both `index.html` and `dashboard.html`
-3. Add relevant entries to `data/recommendations.json` for the new role's skill gaps
-4. No code changes required in any JS or Python module
-
----
-
-## Privacy & Ethics
-
-- **No data leaves the browser** in JavaScript-only mode
-- **CV raw text is stripped** before sessionStorage: `parsedCV: { ...parsed, raw_text: "" }`
-- **Scoring uses only skill/experience signals** — no name, age, gender, or institution prestige
-- **All weights are published** and visible on the dashboard — fully transparent
-- **No automated hiring decisions** — the tool is an advisory self-assessment instrument
-
-See `docs/architecture.md` for the full Ethical AI & Bias Prevention section.
-
----
-
-
