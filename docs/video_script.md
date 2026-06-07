@@ -11,7 +11,7 @@
 > - Open `index.html` in your browser (via Live Server or `python -m http.server 8080`)
 > - Open VS Code with the `cv-analyzer` folder
 > - Have a terminal ready in the `python/` directory
-> - Have Kshitiz Sharma's CV PDF ready for upload
+> - Have Hardik Sharma's CV PDF ready for upload
 > - Set browser zoom to 100%, resolution to 1920×1080
 > - Close all notifications
 
@@ -26,7 +26,7 @@
 "Hello, and welcome to the demo of my internship project —
 the **AI-powered CV Analyzer**, built for **SMARRTIF AI**.
 
-My name is Kshitiz Sharma, and I'm submitting this as my final
+My name is Hardik Sharma, and I'm submitting this as my final
 deliverable for the AI Tool Developer Internship.
 
 [PAUSE 1 second]
@@ -125,7 +125,7 @@ SMARRTIF AI platform dashboard context.
 The main interaction is in this upload card on the left.
 I'll drag and drop a CV file here, or I can click Browse Files.
 
-[CLICK: Browse Files — select Kshitiz Sharma's CV PDF]
+[CLICK: Browse Files — select Hardik Sharma's CV PDF]
 
 "I'm uploading my CV — a Data Scientist profile."
 
@@ -146,7 +146,7 @@ I'm going for Data Scientist.
 Optionally, I can add my GitHub profile URL.
 This will trigger a live API call to GitHub to score my portfolio.
 
-[TYPE: https://github.com/kshitiz-sharma in the GitHub field]
+[TYPE: https://github.com/hardik-sharma in the GitHub field]
 [Note: replace with actual GitHub username if different]
 
 [POINT: Analyze CV button]
