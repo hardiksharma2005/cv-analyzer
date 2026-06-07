@@ -10,26 +10,6 @@ An AI-powered CV analysis tool that parses resumes, benchmarks them against
 industry-standard role profiles across 6 weighted dimensions, and surfaces
 personalised learning recommendations mapped to SMARRTIF AI's course catalogue.
 
-<!-- Add demo GIF here -->
-
----
-
-## Quick Start
-
-```bash
-# 1. Serve the static frontend (no build step needed)
-python -m http.server 8080
-# Open http://localhost:8080
-
-# 2. (Optional) Start the Python NLP backend
-cd python
-python run.py
-# API available at http://localhost:5000
-
-# 3. Deploy to Vercel
-npx vercel deploy
-```
-
 ---
 
 ## Features
@@ -49,11 +29,6 @@ npx vercel deploy
 
 ---
 
-## Screenshot
-
-<!-- Add screenshot here -->
-
----
 
 ## Architecture
 
@@ -82,51 +57,8 @@ npx vercel deploy
 └─────────────────────────────────────────────────────┘
 ```
 
-**Page flow:** `index.html` runs the complete analysis pipeline and writes
-`analysis_results` to `sessionStorage`.  `dashboard.html` reads and renders —
-it never re-runs the pipeline.
-
 ---
 
-## File Structure
-
-```
-cv-analyzer/
-├── index.html              # Upload page + pipeline trigger
-├── dashboard.html          # Results page (render only)
-├── vercel.json             # Static hosting + security headers
-├── CLAUDE.md               # Codebase guide for Claude Code
-│
-├── css/
-│   └── style.css           # Design tokens + shared component styles
-│
-├── js/
-│   ├── parser.js           # CVParser — PDF.js text extraction + skill detection
-│   ├── scorer.js           # CVScorer — 6-dimension weighted scoring
-│   ├── recommender.js      # RecommendationEngine — gap → recommendation mapping
-│   ├── github.js           # GitHubAnalyzer — REST API + skill inference
-│   └── app.js              # CVAnalyzerApp — pipeline orchestrator
-│
-├── data/
-│   ├── role_profiles.json  # 4 role benchmarks (skills, weights, certifications)
-│   └── recommendations.json # 32 skill-gap entries with SMARRTIF AI service mappings
-│
-├── python/
-│   ├── cv_analyzer.py      # Flask REST API (5 endpoints)
-│   ├── nlp_engine.py       # CVNLPEngine — spaCy + NLTK + TF-IDF
-│   ├── scorer.py           # CVScorer Python — ATS simulation + percentile
-│   ├── mock_integrations.py # LinkedIn/Tableau/PowerBI mocks + live GitHub helper
-│   ├── run.py              # Pre-flight checks + server startup script
-│   └── requirements.txt
-│
-└── docs/
-    ├── architecture.md          # Technical architecture + scoring methodology
-    ├── api_integration_plan.md  # OAuth flows, DB schema, scaling roadmap
-    ├── video_script.md          # Demo recording script (8–10 min)
-    └── project_report.md        # Formal internship project report
-```
-
----
 
 ## Scoring Model
 
@@ -145,37 +77,6 @@ Each CV is scored across 6 dimensions with role-specific weights:
 
 ---
 
-## Python NLP API
-
-The optional Python backend exposes 5 REST endpoints on `http://localhost:5000`:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/health` | Liveness check — `{status, nlp_ready}` |
-| `GET` | `/api/roles` | Available role profiles + scoring weights |
-| `POST` | `/api/parse` | Extract + parse CV (multipart: `cv_file`) |
-| `POST` | `/api/analyze` | Full pipeline (multipart: `cv_file`, `target_role`, `github_url?`) |
-| `POST` | `/api/github` | GitHub profile analysis (JSON: `{github_url}`) |
-
-### Install Python dependencies
-
-```bash
-cd python
-pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-python run.py
-```
-
-### Optional: Increase GitHub API rate limit (60 → 5,000 req/hr)
-
-```bash
-# Set a GitHub Personal Access Token (only needs public_repo read scope)
-export GITHUB_TOKEN=ghp_your_token_here
-python run.py
-```
-
----
-
 ## Supported Roles
 
 | Role | Key Skills |
@@ -186,6 +87,7 @@ python run.py
 | **Business Analyst** | Requirements Gathering, JIRA, Stakeholder Management, BPMN, Gap Analysis |
 
 ---
+<<<<<<< HEAD
 
 ## Adding a New Role
 
@@ -242,3 +144,5 @@ welcome as the job market evolves — no code changes required.
 © 2025 SMARRTIF AI. All rights reserved.
 
 *Built as an internship project by Hardik Sharma, AI Tool Developer Intern.*
+=======
+>>>>>>> 04ffb403de3d12a5d83beeff0480e059415f6891
