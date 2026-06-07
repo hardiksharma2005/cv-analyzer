@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Analysis Report — SMARRTIF AI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Dashboard-specific styles ── */
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 16px; border-radius: var(--radius-md);
+      background: var(--card-bg); border: 1.5px solid var(--border);
+      color: var(--text-muted); font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all var(--transition);
+    }
+    .back-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(108,63,197,0.05); }
+
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: var(--radius-md);
+      background: var(--gradient); color: #fff;
+      font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(108,63,197,0.25);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .download-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(108,63,197,0.40); }
+
+    /* Demo banner */
+    .demo-banner {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px; border-radius: var(--radius-md);
+      background: rgba(245,158,11,0.09); border: 1px solid rgba(245,158,11,0.28);
+      margin-bottom: 20px; font-size: 13.5px; color: #92400e;
+    }
+    .demo-banner a { color: inherit; font-weight: 700; }
+
+    /* ── Summary Card ── */
+    .summary-card {
+      display: flex; align-items: center; gap: 36px;
+      padding: 28px 36px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .candidate-meta { min-width: 160px; }
+    .cv-filename {
+      display: block; font-size: 13px; color: var(--text-muted);
+      margin-bottom: 10px; word-break: break-all; max-width: 220px;
+    }
+    .cv-filename::before { content: '📄 '; }
+    .role-badge {
+      display: inline-block; padding: 5px 16px; border-radius: 20px;
+      background: var(--gradient); color: #fff; font-size: 13px; font-weight: 600;
+      box-shadow: 0 3px 10px rgba(108,63,197,0.28);
+    }
+
+    /* Circular score ring */
+    .score-ring-wrap { position: relative; width: 148px; height: 148px; flex-shrink: 0; }
+    .score-ring { transform: rotate(-90deg); width: 148px; height: 148px; display: block; }
+    .ring-track  { fill: none; stroke: #edf0f7; stroke-width: 11; }
+    .ring-progress {
+      fill: none; stroke: url(#ringGrad); stroke-width: 11; stroke-linecap: round;
+      stroke-dasharray: 408; stroke-dashoffset: 408;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ring-center {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); text-align: center;
+    }
+    .ring-score-num {
+      display: block; font-size: 36px; font-weight: 800;
+      color: var(--text-dark); letter-spacing: -1.5px; line-height: 1;
+    }
+    .ring-score-label {
+      display: block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.6px; text-transform: uppercase; margin-top: 5px; color: var(--text-muted);
+    }
+
+    /* Dimension mini scores */
+    .dim-scores-row { display: flex; gap: 14px; flex: 1; flex-wrap: wrap; min-width: 0; }
+    .mini-dim { flex: 1; min-width: 68px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .mini-dim-value { font-size: 22px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; line-height: 1; }
+    .mini-dim-label { font-size: 10px; color: var(--text-muted); text-align: center; font-weight: 500; line-height: 1.3; }
+    .mini-dim-bar { width: 100%; height: 4px; background: var(--border-light); border-radius: 4px; overflow: hidden; }
+    .mini-dim-fill { height: 100%; background: var(--gradient); border-radius: 4px; width: 0%; transition: width 1.3s cubic-bezier(0.4,0,0.2,1); }
+
+    /* ── Results 2-col grid ── */
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .results-col  { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+    /* ── Skills card ── */
+    .skills-section-title { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .skills-scroll {
+      max-height: 200px; overflow-y: auto; padding-right: 4px;
+      display: flex; flex-wrap: wrap; gap: 7px;
+      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+    .skills-scroll::-webkit-scrollbar { width: 4px; }
+    .skills-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .skills-divider { border: none; border-top: 1px solid var(--border-light); margin: 16px 0; }
+    .skill-tag {
+      display: inline-flex; align-items: center;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 500; white-space: nowrap; text-transform: capitalize;
+    }
+    .skill-tag.detected { background: rgba(16,185,129,0.11); color: #065f46; border: 1px solid rgba(16,185,129,0.24); }
+    .skill-tag.missing  { background: rgba(239,68,68,0.09);  color: #991b1b; border: 1px solid rgba(239,68,68,0.22); }
+    .no-skills-msg { font-size: 13px; color: var(--text-light); font-style: italic; }
+
+    /* ── Experience & Education card ── */
+    .exp-section { margin-bottom: 18px; }
+    .exp-section:last-child { margin-bottom: 0; }
+    .exp-section h4 { font-size: 11.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+    .exp-years-row  { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+    .exp-years-num  { font-size: 30px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; line-height: 1; }
+    .exp-years-unit { font-size: 13px; color: var(--text-muted); }
+    .exp-bar-track  { height: 8px; background: var(--border-light); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+    .exp-bar-fill   { height: 100%; background: var(--gradient); border-radius: 8px; width: 0%; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+    .exp-bar-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); }
+    .exp-edu-divider { border: none; border-top: 1px solid var(--border-light); margin: 18px 0; }
+    .edu-row { display: flex; align-items: center; gap: 12px; }
+    .edu-icon-box {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--gradient-soft); border: 1px solid rgba(108,63,197,0.14);
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .edu-degree { font-size: 14px; font-weight: 700; color: var(--text-dark); line-height: 1.3; }
+    .edu-field  { font-size: 12px; color: var(--text-muted); margin-top: 3px; text-transform: capitalize; }
+
+    /* ── Radar chart ── */
+    .radar-wrap { position: relative; height: 270px; display: flex; align-items: center; justify-content: center; }
+
+    /* ── GitHub Analysis Card ── */
+    .gh-summary {
+      display: flex; align-items: center; gap: 20px; margin-bottom: 16px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--border-light);
+    }
+    .gh-ring-wrap { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
+    .gh-ring { transform: rotate(-90deg); width: 80px; height: 80px; display: block; }
+    .gh-ring-track    { fill: none; stroke: #edf0f7; stroke-width: 7; }
+    .gh-ring-progress {
+      fill: none; stroke: url(#ghRingGrad); stroke-width: 7; stroke-linecap: round;
+      stroke-dasharray: 201; stroke-dashoffset: 201;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    .gh-ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+    .gh-score-num { display: block; font-size: 20px; font-weight: 800; color: var(--text-dark); line-height: 1; }
+    .gh-score-lbl { display: block; font-size: 9px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+    .gh-stats { display: flex; gap: 16px; flex: 1; }
+    .gh-stat  { text-align: center; }
+    .gh-stat-val { display: block; font-size: 18px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; line-height: 1; }
+    .gh-stat-lbl { display: block; font-size: 10px; color: var(--text-muted); font-weight: 500; margin-top: 3px; }
+
+    .gh-section { margin-top: 12px; }
+    .gh-section-title { font-size: 11.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .gh-langs { display: flex; flex-wrap: wrap; gap: 6px; }
+    .gh-lang-tag {
+      padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600;
+      background: var(--gradient-soft); color: var(--primary); border: 1px solid rgba(108,63,197,0.15);
+    }
+    .gh-repo-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      background: #fafbfc; border: 1px solid var(--border-light); margin-bottom: 6px; font-size: 12.5px;
+      transition: border-color var(--transition);
+    }
+    .gh-repo-item:last-child { margin-bottom: 0; }
+    .gh-repo-item:hover { border-color: rgba(108,63,197,0.22); }
+    .gh-repo-name { font-weight: 600; color: var(--text-dark); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gh-repo-lang { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
+    .gh-repo-stars { font-size: 11.5px; color: var(--text-muted); flex-shrink: 0; white-space: nowrap; }
+
+    /* ── Recommendations card ── */
+    .rec-item {
+      padding: 15px; border-radius: var(--radius-md);
+      border: 1px solid var(--border-light); background: #fafbfc;
+      margin-bottom: 11px; transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .rec-item:last-child { margin-bottom: 0; }
+    .rec-item:hover { border-color: rgba(108,63,197,0.22); box-shadow: 0 2px 10px rgba(108,63,197,0.07); }
+    .rec-header { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+    .rec-num {
+      width: 24px; height: 24px; border-radius: 50%; background: var(--gradient);
+      color: #fff; font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .rec-skill-name { font-size: 13.5px; font-weight: 700; color: var(--text-dark); flex: 1; }
+    .priority-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .priority-badge.high   { background: rgba(239,68,68,0.12);  color: #b91c1c; }
+    .priority-badge.medium { background: rgba(245,158,11,0.12); color: #92400e; }
+    .priority-badge.low    { background: rgba(16,185,129,0.12); color: #065f46; }
+    .rec-text { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; margin-bottom: 8px; }
+    .rec-course-box {
+      display: flex; align-items: flex-start; gap: 7px;
+      padding: 8px 12px; background: rgba(108,63,197,0.05);
+      border-radius: var(--radius-sm); border: 1px solid rgba(108,63,197,0.10);
+    }
+    .rec-course-text { font-size: 11.5px; color: var(--primary); font-weight: 500; line-height: 1.4; }
+
+    /* ── Action Plan ── */
+    .action-plan-card { margin-bottom: 24px; }
+    .action-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 20px; }
+    .step-card { padding: 22px 20px; border-radius: var(--radius-md); border: 1.5px solid; transition: transform var(--transition), box-shadow var(--transition); }
+    .step-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .step-card.s1 { border-color: rgba(239,68,68,0.28);  background: rgba(239,68,68,0.03); }
+    .step-card.s2 { border-color: rgba(245,158,11,0.28); background: rgba(245,158,11,0.03); }
+    .step-card.s3 { border-color: rgba(16,185,129,0.28); background: rgba(16,185,129,0.03); }
+    .step-circle { width: 38px; height: 38px; border-radius: 50%; color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+    .step-card.s1 .step-circle { background: #ef4444; box-shadow: 0 4px 12px rgba(239,68,68,0.30); }
+    .step-card.s2 .step-circle { background: #f59e0b; box-shadow: 0 4px 12px rgba(245,158,11,0.30); }
+    .step-card.s3 .step-circle { background: #10b981; box-shadow: 0 4px 12px rgba(16,185,129,0.30); }
+    .step-priority-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+    .step-card.s1 .step-priority-lbl { color: #ef4444; }
+    .step-card.s2 .step-priority-lbl { color: #f59e0b; }
+    .step-card.s3 .step-priority-lbl { color: #10b981; }
+    .step-title    { font-size: 14.5px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+    .step-timeframe { font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px; display: inline-block; padding: 3px 10px; background: rgba(255,255,255,0.8); border-radius: 20px; }
+    .step-action   { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+    .step-score-row { margin-top: 12px; font-size: 12px; color: var(--text-muted); }
+    .step-score-row strong { color: var(--text-dark); }
+    .estimate-footer { margin-top: 20px; padding: 13px 18px; background: var(--gradient-soft); border-radius: var(--radius-md); border: 1px solid rgba(108,63,197,0.12); font-size: 13px; color: var(--text-dark); }
+
+    /* ── Service Recommendation card ── */
+    .service-rec-card {
+      position: relative; overflow: hidden; padding: 32px 36px; margin-bottom: 0;
+      border: 2px solid transparent;
+      background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, var(--gradient) border-box;
+    }
+    .service-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+    .service-icon { font-size: 38px; line-height: 1; }
+    .service-badge-pill { display: inline-block; padding: 3px 12px; border-radius: 20px; background: var(--gradient); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+    .service-name { font-size: 22px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
+    .service-desc { font-size: 14px; color: var(--text-muted); line-height: 1.72; max-width: 680px; margin-bottom: 22px; }
+    .service-cta { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: var(--radius-md); background: var(--gradient); color: #fff; font-size: 14px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 18px rgba(108,63,197,0.30); transition: transform var(--transition), box-shadow var(--transition); }
+    .service-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108,63,197,0.45); }
+
+    /* ── Loading overlay (multi-step) ── */
+    .load-card { background: var(--card-bg); border-radius: var(--radius-xl); padding: 40px 48px; text-align: center; box-shadow: var(--shadow-xl); max-width: 400px; width: 92%; animation: slide-up 0.32s cubic-bezier(0.34,1.56,0.64,1); }
+    .load-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 28px; }
+    .load-logo { width: 36px; height: 36px; border-radius: 9px; background: var(--gradient); color: #fff; font-size: 18px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+    .load-brand-name { font-size: 16px; font-weight: 800; color: var(--text-dark); }
+    .load-steps { text-align: left; margin-bottom: 24px; }
+    .load-step { display: flex; align-items: center; gap: 12px; padding: 10px 0; font-size: 14px; color: var(--text-light); border-bottom: 1px solid var(--border-light); transition: color 0.35s ease; }
+    .load-step:last-child { border-bottom: none; }
+    .load-step.active { color: var(--text-dark); font-weight: 600; }
+    .load-step.done   { color: var(--success); }
+    .lstep-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.35s ease; }
+    .load-step.active .lstep-dot { background: var(--primary); animation: blink-dot 1.2s ease-in-out infinite; }
+    .load-step.done   .lstep-dot { background: var(--success); animation: none; }
+    .load-progress-row { display: flex; align-items: center; gap: 12px; }
+    .load-bar { flex: 1; height: 6px; background: var(--border-light); border-radius: 6px; overflow: hidden; }
+    .load-bar-fill { height: 100%; background: var(--gradient); border-radius: 6px; width: 0%; transition: width 0.5s ease; }
+    .load-pct { font-size: 13px; font-weight: 700; color: var(--primary); min-width: 38px; text-align: right; }
+
+    /* ── Print ── */
+    @media print {
+      .sidebar, .header-actions, .loading-overlay, .demo-banner { display: none !important; }
+      .main-content  { margin-left: 0 !important; max-width: 100% !important; padding: 16px 24px !important; }
+      .card          { box-shadow: none !important; border: 1px solid #e5e7eb !important; break-inside: avoid; }
+      .results-grid  { grid-template-columns: 1fr !important; }
+      .action-grid   { grid-template-columns: repeat(3,1fr) !important; }
+      .service-rec-card { border: 2px solid #6C3FC5 !important; }
+      body           { background: #fff !important; }
+      @page          { margin: 1.2cm; size: A4; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1100px) { .results-grid { grid-template-columns: 1fr; } .summary-card { flex-direction: column; align-items: flex-start; } .dim-scores-row { width: 100%; } }
+    @media (max-width: 860px)  { .action-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px)  { .summary-card { padding: 20px; } }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">S</div>
+      <div class="brand-info"><h2>SMARRTIF AI</h2><p>Learning Smartly</p></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></a>
+      <a href="#" class="nav-item active"><span class="nav-icon">📄</span><span class="nav-label">CV Analyzer</span></a>
+      <a href="#" class="nav-item"><span class="nav-icon">👥</span><span class="nav-label">Candidates</span></a>
+      <a href="#" class="nav-item"><span class="nav-icon">💼</span><span class="nav-label">Job Roles</span></a>
+      <a href="#" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Analytics</span></a>
+      <a href="#" class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+    </nav>
+  </aside>
+
+  <!-- ═══════════ MAIN CONTENT ═══════════ -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">CV Analysis Report</h1>
+        <p class="page-subtitle">Generated by SMARRTIF AI · <span id="reportDate"></span></p>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="back-btn">← Analyze Another CV</a>
+        <button class="download-btn" onclick="window.print()">⬇ Download Report</button>
+      </div>
+    </header>
+
+    <div class="demo-banner" id="demoBanner" style="display:none;">
+      <span>🎭</span>
+      <span><strong>Demo Mode</strong> — Showing sample results for a Data Scientist profile. <a href="index.html">Upload your CV</a> to get your real score.</span>
+    </div>
+
+    <!-- ─── SECTION 1: Summary ─── -->
+    <section class="summary-card card">
+      <div class="candidate-meta">
+        <span class="cv-filename" id="cvFilenameEl">—</span>
+        <span class="role-badge"  id="roleBadgeEl">Loading…</span>
+      </div>
+      <div class="score-ring-wrap">
+        <svg class="score-ring" viewBox="0 0 148 148" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#6C3FC5"/>
+              <stop offset="100%" stop-color="#00B4D8"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-track"    cx="74" cy="74" r="65"/>
+          <circle class="ring-progress" cx="74" cy="74" r="65" id="ringProgress"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-score-num"   id="ringScoreNum">0</span>
+          <span class="ring-score-label" id="ringScoreLabel">—</span>
+        </div>
+      </div>
+      <div class="dim-scores-row" id="dimScoresRow"></div>
+    </section>
+
+    <!-- ─── SECTION 2: Two-column grid ─── -->
+    <div class="results-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="results-col">
+
+        <!-- Skills Analysis -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Skills Analysis</h3>
+            <p class="card-subtitle" id="skillsCoverage">Analysing…</p>
+          </div>
+          <p class="skills-section-title">✅ Detected Skills</p>
+          <div class="skills-scroll" id="detectedSkillsWrap"></div>
+          <hr class="skills-divider">
+          <p class="skills-section-title">❌ Missing Required Skills</p>
+          <div class="skills-scroll" id="missingSkillsWrap"></div>
+        </div>
+
+        <!-- Experience & Education -->
+        <div class="card">
+          <div class="card-header"><h3>Experience &amp; Education</h3></div>
+          <div class="exp-section">
+            <h4>💼 Work Experience</h4>
+            <div class="exp-years-row">
+              <span class="exp-years-num"  id="expYearsNum">0</span>
+              <span class="exp-years-unit">years of experience</span>
+            </div>
+            <div class="exp-bar-track"><div class="exp-bar-fill" id="expBarFill"></div></div>
+            <div class="exp-bar-labels"><span>0y</span><span id="expMinLabel">Min: —</span><span>10y+</span></div>
+          </div>
+          <hr class="exp-edu-divider">
+          <div class="exp-section">
+            <h4>🎓 Education</h4>
+            <div class="edu-row">
+              <div class="edu-icon-box" id="eduIconBox">🎓</div>
+              <div>
+                <div class="edu-degree" id="eduDegree">—</div>
+                <div class="edu-field"  id="eduField">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /LEFT -->
+
+      <!-- RIGHT COLUMN -->
+      <div class="results-col">
+
+        <!-- Score Breakdown Radar -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Score Breakdown</h3>
+            <p class="card-subtitle">6-dimension performance radar</p>
+          </div>
+          <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+        </div>
+
+        <!-- GitHub Analysis Card (hidden until data arrives) -->
+        <div class="card" id="githubCard" style="display:none;">
+          <div class="card-header">
+            <h3>🐙 GitHub Analysis</h3>
+            <p class="card-subtitle" id="ghUsername">—</p>
+          </div>
+
+          <div class="gh-summary">
+            <!-- Small 80px score ring -->
+            <div class="gh-ring-wrap">
+              <svg class="gh-ring" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ghRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%"   stop-color="#6C3FC5"/>
+                    <stop offset="100%" stop-color="#00B4D8"/>
+                  </linearGradient>
+                </defs>
+                <circle class="gh-ring-track"    cx="40" cy="40" r="32"/>
+                <circle class="gh-ring-progress" cx="40" cy="40" r="32" id="ghRingProgress"/>
+              </svg>
+              <div class="gh-ring-center">
+                <span class="gh-score-num" id="ghScoreNum">0</span>
+                <span class="gh-score-lbl">GitHub</span>
+              </div>
+            </div>
+            <!-- Stats row -->
+            <div class="gh-stats">
+              <div class="gh-stat"><span class="gh-stat-val" id="ghRepos">—</span><span class="gh-stat-lbl">Repos</span></div>
+              <div class="gh-stat"><span class="gh-stat-val" id="ghStars">—</span><span class="gh-stat-lbl">Stars</span></div>
+              <div class="gh-stat"><span class="gh-stat-val" id="ghFollowers">—</span><span class="gh-stat-lbl">Followers</span></div>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="gh-section">
+            <p class="gh-section-title">🔤 Languages</p>
+            <div class="gh-langs" id="ghLangs"></div>
+          </div>
+
+          <!-- Top 3 repos -->
+          <div class="gh-section">
+            <p class="gh-section-title">⭐ Top Repositories</p>
+            <div id="ghTopRepos"></div>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📚 Recommendations</h3>
+            <p class="card-subtitle">Top skill gap actions</p>
+          </div>
+          <div id="recsListWrap"></div>
+        </div>
+
+      </div><!-- /RIGHT -->
+
+    </div><!-- /results-grid -->
+
+    <!-- ─── SECTION 3a: Action Plan ─── -->
+    <div class="card action-plan-card">
+      <div class="card-header">
+        <h3>🗺️ Your Action Plan</h3>
+        <p class="card-subtitle">Prioritised steps targeting your weakest dimensions</p>
+      </div>
+      <div class="action-grid" id="actionGrid"></div>
+      <div class="estimate-footer" id="estimateFooter"></div>
+    </div>
+
+    <!-- ─── SECTION 3b: Service Recommendation ─── -->
+    <div class="card service-rec-card">
+      <div class="service-header">
+        <span class="service-icon" id="svcIcon">🎯</span>
+        <div>
+          <div class="service-badge-pill" id="svcBadge">Recommended</div>
+          <div class="service-name"       id="svcName">SMARRTIF AI Programme</div>
+        </div>
+      </div>
+      <p class="service-desc" id="svcDesc">Loading recommendation…</p>
+      <button class="service-cta" id="svcCta">Learn More →</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══════════ LOADING OVERLAY ═══════════ -->
+<div class="loading-overlay" id="loadingOverlay" style="display:flex;"
+     role="dialog" aria-modal="true" aria-label="Loading analysis report">
+  <div class="load-card">
+    <div class="load-brand">
+      <div class="load-logo">S</div>
+      <span class="load-brand-name">SMARRTIF AI</span>
+    </div>
+    <div class="load-steps">
+      <div class="load-step" id="lstep1"><span class="lstep-dot"></span><span>📄 Loading CV data…</span></div>
+      <div class="load-step" id="lstep2"><span class="lstep-dot"></span><span>🧠 Processing skills…</span></div>
+      <div class="load-step" id="lstep3"><span class="lstep-dot"></span><span>📊 Preparing report…</span></div>
+      <div class="load-step" id="lstep4"><span class="lstep-dot"></span><span>💡 Finalising insights…</span></div>
+    </div>
+    <div class="load-progress-row">
+      <div class="load-bar"><div class="load-bar-fill" id="loadBarFill"></div></div>
+      <span class="load-pct" id="loadPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/parser.js"></script>
+<script src="js/scorer.js"></script>
+<script src="js/recommender.js"></script>
+<script src="js/github.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   dashboard.html — Render Script
+   SMARRTIF AI CV Analyzer
+
+   Reads the pre-computed "analysis_results" object stored in
+   sessionStorage by app.js and renders all report sections.
+   Falls back to realistic demo data when accessed directly.
+═══════════════════════════════════════════════════════════ */
+
+/* ─── Demo analysis_results (Data Scientist, score 70, with GitHub) ─── */
+const DEMO_RESULTS = {
+  filename: 'sample_data_scientist_cv.pdf',
+  role:     'Data Scientist',
+  isDemo:   true,
+  parsedCV: {
+    skills: {
+      detected: ['python','machine learning','deep learning','tensorflow','pandas','numpy',
+                 'scikit-learn','sql','docker','git','statistics','matplotlib','seaborn',
+                 'feature engineering','jupyter'],
+      count: 15
+    },
+    experience: { years: 3, months: 36, confidence: 'high', meets_minimum: true },
+    education: { degree_level: 3, degree_label: 'Bachelors', field: 'Computer Science',
+                 all_fields: ['computer science','data science'], keywords_found: ['computer science'] },
+    projects:       { count: 4, has_github: true, github_url: 'https://github.com/johndoe' },
+    certifications: { detected: ['aws certified','coursera'], count: 2, has_certifications: true,
+                      all_mentions: ['AWS Certified Machine Learning Specialty'] },
+    profile_completeness: 75
+  },
+  scores: {
+    role: 'Data Scientist', total_score: 70, label: 'Proficient', color: '#3b82f6',
+    dimensions: {
+      skills:        { score:72, weight:35, label:'Skills',
+                       matched_required:['python','machine learning','deep learning','tensorflow','pandas','numpy','scikit-learn','sql','feature engineering'],
+                       missing_required:['large language models (llms)','mlops','vector databases','cloud platforms (aws / gcp / azure)','pytorch','experiment tracking (mlflow / w&b)'],
+                       matched_nice_to_have:['docker'], required_coverage_pct:56 },
+      experience:    { score:65, weight:25, label:'Experience', detected_years:3, required_years:2, meets_minimum:true },
+      education:     { score:80, weight:15, label:'Education',  degree_level:3, degree_label:'Bachelors', field_match:true, relevant_fields:['computer science'] },
+      projects:      { score:70, weight:15, label:'Projects',   project_count:4, has_github:true },
+      certifications:{ score:55, weight:5,  label:'Certifications', matched_certs:['aws certified'], total_detected:2, has_certifications:true },
+      profile_completeness:{ score:75, weight:5, label:'Profile' }
+    }
+  },
+  recommendations: {
+    skill_recommendations: [
+      { skill:'Large Language Models (LLMs)', priority:'high',   estimated_hours:40, gap_recommendation:'LLMs are now a core competency for Data Scientists. SMARRTIF AI offers hands-on LLM deployment workshops.', course_suggestion:'DeepLearning.AI – LLM Specialization (Coursera)' },
+      { skill:'MLOps',                        priority:'high',   estimated_hours:50, gap_recommendation:'MLOps bridges model development and production deployment. SMARRTIF AI\'s Accelerator covers versioning, automated retraining, and monitoring.', course_suggestion:'Coursera – MLOps Specialization by DeepLearning.AI' },
+      { skill:'Vector Databases',             priority:'high',   estimated_hours:20, gap_recommendation:'Vector stores are essential for modern RAG applications. SMARRTIF AI\'s Bootcamp covers Pinecone, Weaviate, and pgvector.', course_suggestion:'Pinecone Learn – Vector Database Fundamentals (free)' },
+      { skill:'PyTorch',                      priority:'high',   estimated_hours:35, gap_recommendation:'PyTorch dominates ML research and production deployments. SMARRTIF AI\'s Deep Learning course covers PyTorch fundamentals.', course_suggestion:'fast.ai – Practical Deep Learning for Coders (free)' },
+      { skill:'Cloud Platforms (AWS/GCP/Azure)', priority:'medium', estimated_hours:35, gap_recommendation:'Cloud fluency is expected for production ML deployments. SMARRTIF AI\'s Cloud Accelerator prepares you for major cloud certifications.', course_suggestion:'AWS Skill Builder – Cloud Practitioner Essentials (free)' },
+      { skill:'Experiment Tracking (MLflow/W&B)', priority:'medium', estimated_hours:15, gap_recommendation:'Experiment tracking enables reproducible ML research. SMARRTIF AI\'s ML Engineering track covers MLflow and W&B.', course_suggestion:'MLflow Tutorials (official docs, free)' }
+    ],
+    service_recommendation: { service:'Skill Enhancement Workshop', icon:'📈', badge:'Good Potential', color:'#f59e0b', description:'You\'re on the right track for Data Scientist! SMARRTIF AI\'s Skill Enhancement Workshop delivers focused, hands-on training on your specific skill gaps through live sessions and project reviews.', cta:'Join the Enhancement Workshop' },
+    action_plan: [
+      { step:1, label:'Technical Skills',  current_score:72, target_score:92, action:'Enrol in LLM and MLOps courses this week and build one portfolio project per skill to demonstrate practical competency.', priority:'Immediate' },
+      { step:2, label:'Certifications',    current_score:55, target_score:85, action:'Pursue AWS Certified ML Specialty or Google Professional ML Engineer certification within 60 days.', priority:'Short-term' },
+      { step:3, label:'Work Experience',   current_score:65, target_score:88, action:'Seek ML engineering roles, contribute to open-source ML projects, or take on freelance data science projects involving production systems.', priority:'Medium-term' }
+    ],
+    improvement_estimate: { total_hours:195, weeks:20, months:4.6, skill_count:6, breakdown:'~195 total study hours across 6 skill gaps at 10 hrs/week ≈ 20 weeks (4.6 months).' },
+    total_gaps: 6
+  },
+  github: {
+    username: 'johndoe',
+    profile:  { username:'johndoe', name:'John Doe', bio:'Data Scientist | ML Engineer | Open Source Enthusiast', public_repos:14, followers:52, following:28, created_at:'2019-04-12T00:00:00Z', avatar_url:'', html_url:'https://github.com/johndoe' },
+    analysis: {
+      score: 68,
+      breakdown: { repos:14, stars:9, languages:16, age:11, followers:18 },
+      detected_languages: ['Python','Jupyter Notebook','JavaScript','TypeScript','R'],
+      top_repositories: [
+        { name:'ml-experiments',     description:'Collection of ML experiments and notebooks', language:'Jupyter Notebook', stargazers_count:23, html_url:'#' },
+        { name:'nlp-toolkit',        description:'NLP utility functions and preprocessing pipelines', language:'Python', stargazers_count:11, html_url:'#' },
+        { name:'data-viz-dashboard', description:'Interactive data visualization dashboard with D3.js', language:'JavaScript', stargazers_count:7, html_url:'#' }
+      ],
+      total_stars: 41,
+      account_age_years: 5.2
+    },
+    detected_skills: ['python','data science','nlp','javascript','r'],
+    recommendations: [
+      { type:'topics', priority:'medium', message:'Add relevant topics/tags to your repositories to improve discoverability by recruiters.' }
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   LOADING ANIMATION — sequenced steps, 600ms each
+═══════════════════════════════════════════════════════════ */
+function runLoadingAnimation() {
+  const IDS  = ['lstep1','lstep2','lstep3','lstep4'];
+  const PCTS = [18, 44, 70, 94];
+  const bar  = document.getElementById('loadBarFill');
+  const pct  = document.getElementById('loadPct');
+
+  const activate = i => {
+    if (i > 0) document.getElementById(IDS[i-1])?.classList.replace('active','done');
+    document.getElementById(IDS[i])?.classList.add('active');
+    if (bar) bar.style.width  = PCTS[i] + '%';
+    if (pct) pct.textContent  = PCTS[i] + '%';
+  };
+
+  activate(0);
+  return new Promise(resolve => {
+    setTimeout(() => activate(1), 600);
+    setTimeout(() => activate(2), 1200);
+    setTimeout(() => activate(3), 1800);
+    setTimeout(() => {
+      document.getElementById(IDS[3])?.classList.replace('active','done');
+      if (bar) bar.style.width = '100%';
+      if (pct) pct.textContent = '100%';
+      resolve();
+    }, 2450);
+  });
+}
+
+function hideOverlay() {
+  const el = document.getElementById('loadingOverlay');
+  el.style.transition = 'opacity 0.4s ease';
+  el.style.opacity    = '0';
+  setTimeout(() => { el.style.display = 'none'; }, 420);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATION HELPERS
+═══════════════════════════════════════════════════════════ */
+function animateCounter(el, target, ms = 1500) {
+  const t0 = performance.now();
+  const tick = now => {
+    const p = Math.min((now - t0) / ms, 1);
+    el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function animateRing(score, ringId = 'ringProgress', circumference = 408) {
+  const el = document.getElementById(ringId);
+  if (!el) return;
+  requestAnimationFrame(() => {
+    el.style.strokeDashoffset = circumference - (score / 100) * circumference;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER FUNCTIONS
+═══════════════════════════════════════════════════════════ */
+function renderReportDate() {
+  const el = document.getElementById('reportDate');
+  if (el) el.textContent = new Date().toLocaleDateString('en-GB',{ day:'numeric', month:'long', year:'numeric' });
+}
+
+function renderSummary(scores, filename, role) {
+  document.getElementById('cvFilenameEl').textContent   = filename || '—';
+  document.getElementById('roleBadgeEl').textContent    = role     || '—';
+  document.getElementById('ringScoreLabel').textContent = scores.label;
+  document.getElementById('ringScoreLabel').style.color = scores.color;
+
+  setTimeout(() => {
+    animateRing(scores.total_score, 'ringProgress', 408);
+    animateCounter(document.getElementById('ringScoreNum'), scores.total_score, 1500);
+  }, 300);
+
+  const row = document.getElementById('dimScoresRow');
+  row.innerHTML = '';
+  Object.values(scores.dimensions).forEach(dim => {
+    const d = document.createElement('div');
+    d.className = 'mini-dim';
+    d.innerHTML = `<div class="mini-dim-value">${dim.score}</div>
+      <div class="mini-dim-label">${dim.label}</div>
+      <div class="mini-dim-bar"><div class="mini-dim-fill" data-t="${dim.score}"></div></div>`;
+    row.appendChild(d);
+  });
+  setTimeout(() => document.querySelectorAll('.mini-dim-fill').forEach(b => { b.style.width = b.dataset.t + '%'; }), 400);
+}
+
+function renderSkills(skillsDim, parsedSkills) {
+  const detected = parsedSkills.detected || [];
+  const missing  = skillsDim.missing_required || [];
+  document.getElementById('skillsCoverage').textContent =
+    `${detected.length} detected · ${missing.length} gap${missing.length !== 1 ? 's' : ''} · ${skillsDim.required_coverage_pct || 0}% required coverage`;
+
+  const tag = (text, cls) => {
+    const s = document.createElement('span');
+    s.className = `skill-tag ${cls}`; s.textContent = text; return s;
+  };
+  const dW = document.getElementById('detectedSkillsWrap'); dW.innerHTML = '';
+  if (detected.length) detected.forEach(s => dW.appendChild(tag(s,'detected')));
+  else dW.innerHTML = '<span class="no-skills-msg">No skills detected</span>';
+
+  const mW = document.getElementById('missingSkillsWrap'); mW.innerHTML = '';
+  if (missing.length) missing.forEach(s => mW.appendChild(tag(s,'missing')));
+  else mW.innerHTML = '<span class="no-skills-msg" style="color:var(--success)">🎉 All required skills detected!</span>';
+}
+
+function renderExpEdu(expDim, parsedExp, parsedEdu) {
+  const years    = parsedExp.years    || 0;
+  const minYears = expDim.required_years || 1;
+  document.getElementById('expYearsNum').textContent = years % 1 === 0 ? years : years.toFixed(1);
+  document.getElementById('expMinLabel').textContent = `Min: ${minYears}y`;
+  setTimeout(() => { document.getElementById('expBarFill').style.width = Math.min((years/10)*100,100) + '%'; }, 400);
+
+  const ICONS = {5:'🔬',4:'🎓',3:'📚',2:'📋',1:'🏫',0:'❓'};
+  document.getElementById('eduIconBox').textContent = ICONS[parsedEdu.degree_level || 0] || '🎓';
+  document.getElementById('eduDegree').textContent  = parsedEdu.degree_label || 'Not Detected';
+  const field = parsedEdu.field && parsedEdu.field !== 'Unknown'
+    ? parsedEdu.field : (parsedEdu.all_fields?.join(', ') || 'Field not detected');
+  document.getElementById('eduField').textContent = field;
+}
+
+function renderRadarChart(scores) {
+  const dims   = Object.values(scores.dimensions);
+  const ctx    = document.getElementById('radarChart').getContext('2d');
+  const grad   = ctx.createRadialGradient(150,150,5,150,150,160);
+  grad.addColorStop(0,'rgba(108,63,197,0.42)'); grad.addColorStop(1,'rgba(0,180,216,0.10)');
+  new Chart(ctx, {
+    type: 'radar',
+    data: { labels: dims.map(d => d.label), datasets: [{
+      data: dims.map(d => d.score), backgroundColor: grad, borderColor: '#6C3FC5',
+      borderWidth: 2.5, pointBackgroundColor: '#6C3FC5', pointBorderColor: '#fff',
+      pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7
+    }]},
+    options: {
+      animation: { duration: 1200 }, responsive: true, maintainAspectRatio: true,
+      scales: { r: { min:0, max:100, ticks:{ display:false }, grid:{color:'rgba(107,114,128,0.12)'}, angleLines:{color:'rgba(107,114,128,0.12)'},
+        pointLabels:{ font:{size:12,weight:'600',family:"-apple-system,'Segoe UI',sans-serif"}, color:'#1a1a2e' } } },
+      plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: c => ` ${c.label}: ${c.raw}/100` } } }
+    }
+  });
+}
+
+/* GitHub profile card */
+function renderGitHub(gh) {
+  if (!gh || !gh.analysis) return;
+  const card = document.getElementById('githubCard');
+  if (!card) return;
+  card.style.display = 'block';
+
+  document.getElementById('ghUsername').textContent = `github.com/${gh.username}`;
+  document.getElementById('ghRepos').textContent    = gh.profile.public_repos;
+  document.getElementById('ghStars').textContent    = gh.analysis.total_stars;
+  document.getElementById('ghFollowers').textContent = gh.profile.followers;
+
+  /* Animate small ring (circumference = 2π×32 ≈ 201) */
+  const score = gh.analysis.score;
+  setTimeout(() => {
+    animateRing(score, 'ghRingProgress', 201);
+    animateCounter(document.getElementById('ghScoreNum'), score, 1200);
+  }, 500);
+
+  /* Languages */
+  const langsEl = document.getElementById('ghLangs');
+  langsEl.innerHTML = '';
+  (gh.analysis.detected_languages || []).slice(0,6).forEach(lang => {
+    const s = document.createElement('span');
+    s.className = 'gh-lang-tag'; s.textContent = lang;
+    langsEl.appendChild(s);
+  });
+
+  /* Top 3 repos */
+  const reposEl = document.getElementById('ghTopRepos');
+  reposEl.innerHTML = '';
+  (gh.analysis.top_repositories || []).slice(0,3).forEach(repo => {
+    const d = document.createElement('div');
+    d.className = 'gh-repo-item';
+    d.innerHTML = `<span class="gh-repo-name">${repo.name}</span>
+      ${repo.language ? `<span class="gh-repo-lang">${repo.language}</span>` : ''}
+      <span class="gh-repo-stars">⭐ ${repo.stargazers_count}</span>`;
+    reposEl.appendChild(d);
+  });
+}
+
+function renderRecommendations(recs) {
+  const wrap = document.getElementById('recsListWrap');
+  wrap.innerHTML = '';
+  recs.slice(0,6).forEach((rec, i) => {
+    const div = document.createElement('div');
+    div.className = 'rec-item';
+    div.innerHTML = `<div class="rec-header">
+        <div class="rec-num">${i+1}</div>
+        <span class="rec-skill-name">${rec.skill}</span>
+        <span class="priority-badge ${rec.priority}">${rec.priority.toUpperCase()}</span>
+      </div>
+      <p class="rec-text">${rec.gap_recommendation}</p>
+      <div class="rec-course-box"><span>📖</span><span class="rec-course-text">${rec.course_suggestion}</span></div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderActionPlan(plan, estimate) {
+  const TIMES   = ['Next 2 weeks','Next 30–60 days','Next 3–6 months'];
+  const CLASSES = ['s1','s2','s3'];
+  const grid    = document.getElementById('actionGrid');
+  grid.innerHTML = '';
+  plan.forEach((step, i) => {
+    const card = document.createElement('div');
+    card.className = `step-card ${CLASSES[i]||'s3'}`;
+    card.innerHTML = `<div class="step-circle">${step.step}</div>
+      <div class="step-priority-lbl">${step.priority}</div>
+      <div class="step-title">${step.label}</div>
+      <div class="step-timeframe">🕐 ${TIMES[i]||'Ongoing'}</div>
+      <p class="step-action">${step.action}</p>
+      <div class="step-score-row">Current: <strong>${step.current_score}</strong> &rarr; Target: <strong>${step.target_score}</strong></div>`;
+    grid.appendChild(card);
+  });
+  const footer = document.getElementById('estimateFooter');
+  if (estimate?.breakdown) footer.innerHTML = `⏱️ <strong>Estimated Improvement Time:</strong> ${estimate.breakdown}`;
+}
+
+function renderServiceRec(svc) {
+  document.getElementById('svcIcon').textContent  = svc.icon    || '🎯';
+  document.getElementById('svcBadge').textContent = svc.badge   || 'Recommended';
+  document.getElementById('svcName').textContent  = svc.service || '—';
+  document.getElementById('svcDesc').textContent  = svc.description || '';
+  document.getElementById('svcCta').textContent   = (svc.cta || 'Learn More') + ' →';
+}
+
+/* Master render — accepts the full analysis_results object */
+function renderAll(results) {
+  const { scores, recommendations, parsedCV, filename, role, github, isDemo } = results;
+  renderReportDate();
+  renderSummary(scores, filename, role);
+  renderSkills(scores.dimensions.skills, parsedCV.skills);
+  renderExpEdu(scores.dimensions.experience, parsedCV.experience, parsedCV.education);
+  renderRadarChart(scores);
+  if (github) renderGitHub(github);
+  renderRecommendations(recommendations.skill_recommendations || []);
+  renderActionPlan(recommendations.action_plan || [], recommendations.improvement_estimate);
+  renderServiceRec(recommendations.service_recommendation || {});
+  if (isDemo) document.getElementById('demoBanner').style.display = 'flex';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN — reads analysis_results from sessionStorage
+═══════════════════════════════════════════════════════════ */
+(async function main() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+
+  /* Try to read pre-computed results stored by app.js */
+  let results;
+  const raw = sessionStorage.getItem('analysis_results');
+  if (raw) {
+    try { results = JSON.parse(raw); }
+    catch (_) { results = DEMO_RESULTS; }
+  } else {
+    results = DEMO_RESULTS;
+  }
+
+  /* Always run animation — it's part of the UX experience */
+  await runLoadingAnimation();
+  hideOverlay();
+
+  setTimeout(() => renderAll(results), 160);
+})();
+
+/* Sidebar nav */
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    if (this.getAttribute('href') === '#') e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

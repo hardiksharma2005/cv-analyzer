@@ -1,0 +1,244 @@
+{
+  "roles": {
+    "Data Scientist": {
+      "required_skills": [
+        "Python",
+        "Machine Learning",
+        "Deep Learning",
+        "Statistical Analysis",
+        "Data Wrangling",
+        "SQL",
+        "TensorFlow or PyTorch",
+        "Scikit-learn",
+        "Feature Engineering",
+        "Model Evaluation & Validation",
+        "Large Language Models (LLMs)",
+        "Prompt Engineering",
+        "Vector Databases",
+        "MLOps",
+        "Data Visualization",
+        "Experiment Tracking (MLflow / W&B)",
+        "Pandas & NumPy",
+        "Cloud Platforms (AWS / GCP / Azure)"
+      ],
+      "nice_to_have_skills": [
+        "Kubernetes",
+        "Apache Spark",
+        "Retrieval-Augmented Generation (RAG)",
+        "LangChain / LlamaIndex",
+        "Causal Inference",
+        "Bayesian Statistics",
+        "dbt",
+        "Hugging Face Transformers",
+        "Time Series Forecasting",
+        "Graph Neural Networks"
+      ],
+      "min_experience_years": 2,
+      "key_certifications": [
+        "AWS Certified Machine Learning – Specialty",
+        "Google Professional Machine Learning Engineer",
+        "Databricks Certified Associate Developer for Apache Spark",
+        "Deep Learning Specialization (Coursera/DeepLearning.AI)",
+        "MLOps Specialization (Coursera)",
+        "TensorFlow Developer Certificate"
+      ],
+      "education_keywords": [
+        "Computer Science",
+        "Data Science",
+        "Statistics",
+        "Mathematics",
+        "Machine Learning",
+        "Artificial Intelligence",
+        "Computational Science",
+        "Physics",
+        "Engineering"
+      ],
+      "scoring_weights": {
+        "skills": 35,
+        "experience": 25,
+        "education": 15,
+        "projects": 15,
+        "certifications": 5,
+        "profile_completeness": 5
+      }
+    },
+    "Data Analyst": {
+      "required_skills": [
+        "SQL",
+        "Python or R",
+        "Data Visualization",
+        "Power BI",
+        "Tableau",
+        "Excel (Advanced)",
+        "Statistical Analysis",
+        "Data Cleaning & Transformation",
+        "Business Intelligence",
+        "ETL Pipelines",
+        "dbt (Data Build Tool)",
+        "Snowflake",
+        "Google BigQuery or Amazon Redshift",
+        "Dashboard Development",
+        "Stakeholder Communication",
+        "A/B Testing",
+        "KPI Definition & Tracking"
+      ],
+      "nice_to_have_skills": [
+        "Looker or Looker Studio",
+        "Apache Airflow",
+        "Python (Pandas / Matplotlib / Seaborn)",
+        "Data Modeling",
+        "Fivetran or Airbyte",
+        "Monte Carlo (Data Observability)",
+        "Predictive Analytics",
+        "dbt Cloud",
+        "Sigma Computing"
+      ],
+      "min_experience_years": 1,
+      "key_certifications": [
+        "Microsoft Power BI Data Analyst Associate (PL-300)",
+        "Tableau Desktop Specialist",
+        "Google Data Analytics Professional Certificate",
+        "Snowflake SnowPro Core Certification",
+        "dbt Certified Developer",
+        "AWS Certified Data Analytics – Specialty"
+      ],
+      "education_keywords": [
+        "Statistics",
+        "Mathematics",
+        "Data Science",
+        "Business Analytics",
+        "Economics",
+        "Computer Science",
+        "Finance",
+        "Information Systems",
+        "Operations Research"
+      ],
+      "scoring_weights": {
+        "skills": 30,
+        "experience": 25,
+        "education": 15,
+        "projects": 15,
+        "certifications": 10,
+        "profile_completeness": 5
+      }
+    },
+    "Software Engineer": {
+      "required_skills": [
+        "Data Structures & Algorithms",
+        "Object-Oriented Programming",
+        "RESTful API Design",
+        "Git & Version Control",
+        "Unit Testing & TDD",
+        "CI/CD Pipelines",
+        "Cloud-Native Development",
+        "Microservices Architecture",
+        "Containerization (Docker)",
+        "Kubernetes",
+        "System Design",
+        "Relational Databases (PostgreSQL / MySQL)",
+        "Agile / Scrum",
+        "TypeScript or JavaScript",
+        "Python or Java or Go",
+        "Security Best Practices",
+        "Observability & Logging"
+      ],
+      "nice_to_have_skills": [
+        "GraphQL",
+        "Event-Driven Architecture (Kafka / RabbitMQ)",
+        "Serverless Computing",
+        "Infrastructure as Code (Terraform / Pulumi)",
+        "gRPC",
+        "WebSockets",
+        "Redis",
+        "Feature Flags",
+        "Chaos Engineering"
+      ],
+      "min_experience_years": 2,
+      "key_certifications": [
+        "AWS Certified Solutions Architect – Associate",
+        "Certified Kubernetes Application Developer (CKAD)",
+        "Google Associate Cloud Engineer",
+        "Microsoft Azure Developer Associate (AZ-204)",
+        "HashiCorp Terraform Associate",
+        "Docker Certified Associate"
+      ],
+      "education_keywords": [
+        "Computer Science",
+        "Software Engineering",
+        "Information Technology",
+        "Computer Engineering",
+        "Electrical Engineering",
+        "Mathematics",
+        "Systems Engineering"
+      ],
+      "scoring_weights": {
+        "skills": 35,
+        "experience": 25,
+        "education": 10,
+        "projects": 20,
+        "certifications": 5,
+        "profile_completeness": 5
+      }
+    },
+    "Business Analyst": {
+      "required_skills": [
+        "Requirements Gathering",
+        "Business Process Modeling",
+        "SQL",
+        "Power BI",
+        "Tableau",
+        "Excel (Advanced)",
+        "Stakeholder Management",
+        "Use Case & User Story Writing",
+        "Gap Analysis",
+        "Data Analysis",
+        "JIRA / Confluence",
+        "Agile & Scrum",
+        "Wireframing & Prototyping",
+        "KPI Definition",
+        "Change Management",
+        "Communication & Presentation",
+        "Risk Analysis"
+      ],
+      "nice_to_have_skills": [
+        "Python for Data Analysis",
+        "Salesforce CRM",
+        "Process Mining (Celonis)",
+        "Six Sigma / Lean",
+        "Enterprise Architecture (TOGAF)",
+        "BPMN 2.0",
+        "AI / ML Literacy",
+        "Looker",
+        "SAP basics"
+      ],
+      "min_experience_years": 2,
+      "key_certifications": [
+        "PMI Professional in Business Analysis (PMI-PBA)",
+        "IIBA Certified Business Analysis Professional (CBAP)",
+        "Microsoft Power BI Data Analyst Associate (PL-300)",
+        "Tableau Desktop Specialist",
+        "Agile Analysis Certification (AAC)",
+        "Certified Scrum Product Owner (CSPO)"
+      ],
+      "education_keywords": [
+        "Business Administration",
+        "Business Analytics",
+        "Information Systems",
+        "Management Information Systems",
+        "Economics",
+        "Finance",
+        "Operations Management",
+        "Industrial Engineering",
+        "Computer Science"
+      ],
+      "scoring_weights": {
+        "skills": 30,
+        "experience": 25,
+        "education": 15,
+        "projects": 15,
+        "certifications": 10,
+        "profile_completeness": 5
+      }
+    }
+  }
+}

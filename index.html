@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMARRTIF AI – CV Analyzer</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── GitHub input field ── */
+    .github-group { margin-bottom: 20px; }
+
+    .github-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .github-optional {
+      font-size: 11px; color: var(--text-muted); font-weight: 400;
+      background: var(--border-light); padding: 2px 7px; border-radius: 10px;
+      margin-left: 4px;
+    }
+    .github-input-wrap { position: relative; }
+    .github-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%); font-size: 16px; pointer-events: none;
+      line-height: 1;
+    }
+    .github-input {
+      width: 100%; padding: 12px 14px 12px 38px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      background: var(--card-bg); color: var(--text-dark);
+      font-size: 14px; font-family: inherit; outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .github-input:hover  { border-color: var(--secondary); }
+    .github-input:focus  {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
+    }
+    .github-input::placeholder { color: var(--text-light); }
+
+    /* Previous session banner */
+    .last-report-banner {
+      display: none; align-items: center; gap: 12px;
+      padding: 10px 16px; border-radius: var(--radius-md);
+      background: rgba(108,63,197,0.07); border: 1px solid rgba(108,63,197,0.2);
+      margin-bottom: 20px; font-size: 13px; color: var(--primary);
+    }
+    .last-report-banner a { color: inherit; font-weight: 700; }
+
+    /* ── Loading overlay — multi-step (shared with dashboard) ── */
+    .load-card {
+      background: var(--card-bg); border-radius: var(--radius-xl);
+      padding: 40px 48px; text-align: center;
+      box-shadow: var(--shadow-xl); max-width: 400px; width: 92%;
+      animation: slide-up 0.32s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .load-brand {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; margin-bottom: 28px;
+    }
+    .load-logo {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--gradient); color: #fff;
+      font-size: 18px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .load-brand-name { font-size: 16px; font-weight: 800; color: var(--text-dark); }
+
+    .load-steps { text-align: left; margin-bottom: 24px; }
+    .load-step {
+      display: flex; align-items: center; gap: 12px; padding: 10px 0;
+      font-size: 14px; color: var(--text-light);
+      border-bottom: 1px solid var(--border-light);
+      transition: color 0.35s ease;
+    }
+    .load-step:last-child { border-bottom: none; }
+    .load-step.active { color: var(--text-dark); font-weight: 600; }
+    .load-step.done   { color: var(--success); }
+
+    .lstep-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0; transition: background 0.35s ease;
+    }
+    .load-step.active .lstep-dot { background: var(--primary); animation: blink-dot 1.2s ease-in-out infinite; }
+    .load-step.done   .lstep-dot { background: var(--success); animation: none; }
+
+    .load-progress-row { display: flex; align-items: center; gap: 12px; }
+    .load-bar { flex: 1; height: 6px; background: var(--border-light); border-radius: 6px; overflow: hidden; }
+    .load-bar-fill { height: 100%; background: var(--gradient); border-radius: 6px; width: 0%; transition: width 0.5s ease; }
+    .load-pct { font-size: 13px; font-weight: 700; color: var(--primary); min-width: 38px; text-align: right; }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ════════════════════════════════════════
+       SIDEBAR
+  ════════════════════════════════════════ -->
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="brand-logo">S</div>
+      <div class="brand-info">
+        <h2>SMARRTIF AI</h2>
+        <p>Learning Smartly</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item active">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">📄</span>
+        <span class="nav-label">CV Analyzer</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">👥</span>
+        <span class="nav-label">Candidates</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">💼</span>
+        <span class="nav-label">Job Roles</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Analytics</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </a>
+    </nav>
+
+  </aside>
+
+  <!-- ════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">AI-powered insights at a glance</p>
+      </div>
+      <div class="header-actions">
+        <span class="header-date" id="headerDate">📅 June 2025</span>
+        <div class="avatar" title="SMARRTIF AI User">SA</div>
+      </div>
+    </header>
+
+    <!-- Previous session banner -->
+    <div class="last-report-banner" id="lastReportBanner">
+      <span>📋</span>
+      <span>You have a previous analysis saved. <a href="dashboard.html">View last report →</a></span>
+    </div>
+
+    <!-- ──────────────────────────────────────
+         SECTION 1 — Hero Banner
+    ────────────────────────────────────── -->
+    <section class="hero-card">
+
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-dot"></span>
+          Powered by NLP &amp; AI
+        </div>
+        <h2 class="hero-title">AI-Powered CV Analyzer</h2>
+        <p class="hero-subtitle">
+          Upload your CV and get instant AI-driven scoring, skill gap analysis,
+          and personalized recommendations
+        </p>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="orbit-ring ring-1"></div>
+        <div class="orbit-ring ring-2"></div>
+        <div class="orbit-ring ring-3"></div>
+        <div class="orbit-core">AI</div>
+      </div>
+
+      <div class="hero-info-bar">
+        <span>📁 Supports PDF and DOCX formats</span>
+        <span class="dot-sep">•</span>
+        <span>🔍 NLP-powered analysis</span>
+        <span class="dot-sep">•</span>
+        <span>🎯 Industry-aligned scoring</span>
+      </div>
+
+    </section>
+
+    <!-- ──────────────────────────────────────
+         SECTION 2 — Stat Cards
+    ────────────────────────────────────── -->
+    <div class="stats-row">
+
+      <div class="stat-card">
+        <div class="stat-icon-box">📄</div>
+        <div class="stat-body">
+          <div class="stat-value">2,847</div>
+          <div class="stat-label">CVs Analyzed</div>
+          <span class="stat-trend positive">↑ +12% this month</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-box">🧠</div>
+        <div class="stat-body">
+          <div class="stat-value">94%</div>
+          <div class="stat-label">Skills Detected</div>
+          <span class="stat-trend positive">↑ +8% accuracy</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-box">⭐</div>
+        <div class="stat-body">
+          <div class="stat-value">78%</div>
+          <div class="stat-label">Avg. Match Score</div>
+          <span class="stat-trend positive">↑ +5% this week</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-box">⚡</div>
+        <div class="stat-body">
+          <div class="stat-value">&lt; 3s</div>
+          <div class="stat-label">Processing Time</div>
+          <span class="stat-trend teal">✓ Optimized</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ──────────────────────────────────────
+         SECTION 3 — Two Column Layout
+    ────────────────────────────────────── -->
+    <div class="two-col-layout">
+
+      <!-- LEFT: CV Upload Card -->
+      <div class="card upload-card">
+
+        <div class="card-header">
+          <h3>Analyze Your CV</h3>
+          <p class="card-subtitle">Upload and get your personalized report in seconds</p>
+        </div>
+
+        <!-- Drop Zone -->
+        <div class="dropzone" id="dropzone" role="button"
+             aria-label="Upload CV — drag and drop or click to browse">
+
+          <div class="upload-icon-wrap">
+            <span class="cloud-glyph">☁</span>
+            <span class="upload-arrow">↑</span>
+          </div>
+
+          <p class="drop-main">Drag &amp; Drop your CV here</p>
+          <p class="drop-or">or</p>
+
+          <label class="browse-btn" for="fileInput">Browse Files</label>
+          <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden aria-label="Choose CV file">
+
+          <p class="format-hint">Supported: PDF, DOC, DOCX &nbsp;·&nbsp; Max 5 MB</p>
+        </div>
+
+        <!-- Selected File Display (hidden until file chosen) -->
+        <div class="file-info" id="fileInfo" style="display:none;"
+             role="status" aria-live="polite">
+          <span class="file-badge">📄</span>
+          <span class="file-name-text" id="fileNameText"></span>
+          <button class="remove-btn" id="removeBtn" title="Remove file" aria-label="Remove selected file">✕</button>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="role-group">
+          <label for="roleSelect" class="role-label">Target Role</label>
+          <div class="select-wrapper">
+            <select id="roleSelect" class="role-select" aria-required="true">
+              <option value="">Select a role…</option>
+              <option value="Data Scientist">Data Scientist</option>
+              <option value="Data Analyst">Data Analyst</option>
+              <option value="Software Engineer">Software Engineer</option>
+              <option value="Business Analyst">Business Analyst</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- GitHub URL (optional) -->
+        <div class="github-group">
+          <label for="githubInput" class="github-label">
+            🐙 GitHub Profile
+            <span class="github-optional">optional</span>
+          </label>
+          <div class="github-input-wrap">
+            <span class="github-icon">🐙</span>
+            <input
+              type="url"
+              id="githubInput"
+              class="github-input"
+              placeholder="https://github.com/your-username"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="GitHub profile URL (optional)"
+            >
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <button class="analyze-btn" id="analyzeBtn">
+          <span class="btn-icon">✨</span>
+          Analyze CV
+        </button>
+
+      </div><!-- /upload-card -->
+
+      <!-- RIGHT: How It Works Card -->
+      <div class="card how-card">
+
+        <div class="card-header">
+          <h3>How It Works</h3>
+          <p class="card-subtitle">5 steps to your personalized report</p>
+        </div>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Upload CV</h4>
+              <p>PDF or DOCX format supported</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>NLP Parsing</h4>
+              <p>Extracts skills, experience, education automatically</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>AI Scoring</h4>
+              <p>6-dimension scoring against industry benchmarks</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Gap Analysis</h4>
+              <p>Identifies missing skills for your target role</p>
+            </div>
+          </div>
+
+          <div class="step last">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <h4>Recommendations</h4>
+              <p>Personalized learning path and service suggestions</p>
+            </div>
+          </div>
+
+        </div><!-- /steps -->
+      </div><!-- /how-card -->
+
+    </div><!-- /two-col-layout -->
+
+  </main><!-- /main-content -->
+</div><!-- /app-layout -->
+
+<!-- ════════════════════════════════════════
+     Loading Overlay — 4-step animated
+════════════════════════════════════════ -->
+<div class="loading-overlay" id="loadingOverlay" style="display:none;"
+     role="dialog" aria-modal="true" aria-label="Analyzing CV">
+  <div class="load-card">
+    <div class="load-brand">
+      <div class="load-logo">S</div>
+      <span class="load-brand-name">SMARRTIF AI</span>
+    </div>
+    <div class="load-steps">
+      <div class="load-step"><span class="lstep-dot"></span><span>📄 Extracting CV text…</span></div>
+      <div class="load-step"><span class="lstep-dot"></span><span>🧠 Running NLP analysis…</span></div>
+      <div class="load-step"><span class="lstep-dot"></span><span>📊 Calculating scores…</span></div>
+      <div class="load-step"><span class="lstep-dot"></span><span>💡 Generating recommendations…</span></div>
+    </div>
+    <div class="load-progress-row">
+      <div class="load-bar"><div class="load-bar-fill" id="loadBarFill"></div></div>
+      <span class="load-pct" id="loadPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCRIPTS — load order matters
+════════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/parser.js"></script>
+<script src="js/scorer.js"></script>
+<script src="js/recommender.js"></script>
+<script src="js/github.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => CVAnalyzerApp.init());
+</script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+{
+  "skill_recommendations": [
+    {
+      "skill": "Large Language Models (LLMs)",
+      "gap_recommendation": "Build foundational understanding of transformer architecture and LLM fine-tuning. SMARRTIF AI offers hands-on LLM deployment workshops covering OpenAI, Anthropic, and open-source models.",
+      "course_suggestion": "DeepLearning.AI – LLM Specialization (Coursera)",
+      "priority": "high",
+      "estimated_hours": 40
+    },
+    {
+      "skill": "MLOps",
+      "gap_recommendation": "MLOps is critical for production ML — without it models never reach users. SMARRTIF AI's MLOps Accelerator covers model versioning, automated retraining pipelines, and production monitoring.",
+      "course_suggestion": "Coursera – MLOps Specialization by DeepLearning.AI",
+      "priority": "high",
+      "estimated_hours": 50
+    },
+    {
+      "skill": "Vector Databases",
+      "gap_recommendation": "Vector stores underpin modern RAG and semantic search systems. SMARRTIF AI's Vector DB Bootcamp covers Pinecone, Weaviate, pgvector, and integration patterns for LLM applications.",
+      "course_suggestion": "Pinecone Learn – Vector Database Fundamentals (free)",
+      "priority": "high",
+      "estimated_hours": 20
+    },
+    {
+      "skill": "dbt (Data Build Tool)",
+      "gap_recommendation": "dbt is the de-facto standard for analytics engineering. SMARRTIF AI's Modern Analytics Stack training covers dbt Core, dbt Cloud, testing best practices, and the analytics engineering workflow.",
+      "course_suggestion": "dbt Learn – Fundamentals Course (official, free)",
+      "priority": "high",
+      "estimated_hours": 25
+    },
+    {
+      "skill": "Snowflake",
+      "gap_recommendation": "Snowflake proficiency is in high demand at data-driven companies. SMARRTIF AI offers a Snowflake Data Cloud Practitioner track covering performance optimisation, Cortex AI, and cost management.",
+      "course_suggestion": "Snowflake University – Hands-On Essentials: Data Warehouse (free)",
+      "priority": "high",
+      "estimated_hours": 30
+    },
+    {
+      "skill": "Kubernetes",
+      "gap_recommendation": "Container orchestration is essential for scalable production deployments. SMARRTIF AI's Cloud-Native Engineering Programme covers Kubernetes from basics to production-grade cluster management and CKAD preparation.",
+      "course_suggestion": "Linux Foundation – Kubernetes and Cloud Native Essentials (LFS250)",
+      "priority": "high",
+      "estimated_hours": 45
+    },
+    {
+      "skill": "Power BI",
+      "gap_recommendation": "Power BI is the leading enterprise BI tool. SMARRTIF AI's BI Mastery Programme offers end-to-end training including DAX, data modelling, row-level security, and enterprise report deployment.",
+      "course_suggestion": "Microsoft Learn – Power BI learning path (PL-300 prep, free)",
+      "priority": "high",
+      "estimated_hours": 30
+    },
+    {
+      "skill": "Prompt Engineering",
+      "gap_recommendation": "Effective prompting unlocks LLM potential across all technical roles. SMARRTIF AI's Prompt Engineering Practitioner course covers chain-of-thought, few-shot, role prompting, and agentic patterns.",
+      "course_suggestion": "DeepLearning.AI – ChatGPT Prompt Engineering for Developers (free)",
+      "priority": "high",
+      "estimated_hours": 15
+    },
+    {
+      "skill": "Retrieval-Augmented Generation (RAG)",
+      "gap_recommendation": "RAG is the dominant pattern for grounding LLMs with enterprise knowledge bases. SMARRTIF AI's GenAI Solutions Workshop walks through end-to-end RAG system design, evaluation, and production deployment.",
+      "course_suggestion": "DeepLearning.AI – Building and Evaluating Advanced RAG Applications",
+      "priority": "high",
+      "estimated_hours": 25
+    },
+    {
+      "skill": "Deep Learning",
+      "gap_recommendation": "Deep learning is foundational for advanced ML and AI engineering roles. SMARRTIF AI's AI Engineering Bootcamp covers CNNs, RNNs, transformers, and practical PyTorch/TensorFlow model building.",
+      "course_suggestion": "fast.ai – Practical Deep Learning for Coders (free)",
+      "priority": "high",
+      "estimated_hours": 60
+    },
+    {
+      "skill": "Apache Spark",
+      "gap_recommendation": "Spark is essential for processing data at scale beyond what fits in RAM. SMARRTIF AI's Big Data Engineering Programme covers Spark Core, Spark SQL, Structured Streaming, and PySpark on Databricks.",
+      "course_suggestion": "Databricks Academy – Apache Spark Programming with Databricks",
+      "priority": "medium",
+      "estimated_hours": 40
+    },
+    {
+      "skill": "Tableau",
+      "gap_recommendation": "Tableau is a top-tier enterprise visualisation tool. SMARRTIF AI offers a Tableau for Business Intelligence course covering calculated fields, LOD expressions, dashboard storytelling, and Tableau Server.",
+      "course_suggestion": "Tableau eLearning – Desktop I: Fundamentals (official)",
+      "priority": "medium",
+      "estimated_hours": 25
+    },
+    {
+      "skill": "CI/CD Pipelines",
+      "gap_recommendation": "Automated delivery pipelines are a baseline engineering expectation. SMARRTIF AI's DevOps Fundamentals track covers GitHub Actions, GitLab CI, Jenkins pipeline design, and deployment strategies.",
+      "course_suggestion": "GitHub Skills – Introduction to GitHub Actions (free)",
+      "priority": "medium",
+      "estimated_hours": 20
+    },
+    {
+      "skill": "Docker",
+      "gap_recommendation": "Containerisation is foundational for modern application development and ML model serving. SMARRTIF AI's Containers & Cloud workshop provides practical Docker and registry experience with Dockerfile best practices.",
+      "course_suggestion": "Docker – Get Started official tutorials + Play With Docker labs (free)",
+      "priority": "medium",
+      "estimated_hours": 15
+    },
+    {
+      "skill": "Cloud Platforms (AWS / GCP / Azure)",
+      "gap_recommendation": "Cloud fluency is expected across all technical roles. SMARRTIF AI's Cloud Practitioner Accelerator prepares candidates for major cloud certifications with guided hands-on labs and practice exams.",
+      "course_suggestion": "AWS Skill Builder – Cloud Practitioner Essentials (free) or Google Cloud Skills Boost",
+      "priority": "medium",
+      "estimated_hours": 35
+    },
+    {
+      "skill": "A/B Testing",
+      "gap_recommendation": "Experimentation skills drive data-informed product decisions. SMARRTIF AI's Experimentation & Analytics course covers experimental design, statistical power, sequential testing, and avoiding common pitfalls.",
+      "course_suggestion": "Udacity – A/B Testing by Google (free audit)",
+      "priority": "medium",
+      "estimated_hours": 20
+    },
+    {
+      "skill": "ETL Pipelines",
+      "gap_recommendation": "Reliable data pipelines are core infrastructure for any data role. SMARRTIF AI's Data Engineering Foundations course covers ETL vs ELT, Airflow orchestration, pipeline testing, and data quality monitoring.",
+      "course_suggestion": "DataTalks.Club – Data Engineering Zoomcamp (free)",
+      "priority": "medium",
+      "estimated_hours": 40
+    },
+    {
+      "skill": "Statistical Analysis",
+      "gap_recommendation": "Statistics underpins data interpretation across all specialisations. SMARRTIF AI's Applied Statistics for Data Professionals covers hypothesis testing, regression analysis, Bayesian inference, and effect sizes.",
+      "course_suggestion": "StatQuest with Josh Starmer (YouTube, free) or Khan Academy Statistics",
+      "priority": "medium",
+      "estimated_hours": 30
+    },
+    {
+      "skill": "Stakeholder Management",
+      "gap_recommendation": "Translating technical findings for non-technical audiences is essential for career progression. SMARRTIF AI's Business Communication for Analysts workshop focuses on executive reporting, data storytelling, and stakeholder influence.",
+      "course_suggestion": "LinkedIn Learning – Communicating Data Findings to Stakeholders",
+      "priority": "medium",
+      "estimated_hours": 12
+    },
+    {
+      "skill": "System Design",
+      "gap_recommendation": "System design is the key differentiator between mid-level and senior engineers. SMARRTIF AI's Engineering Excellence track includes distributed systems design, load balancing, caching strategies, and scalability patterns.",
+      "course_suggestion": "ByteByteGo – System Design Interview (book + newsletter)",
+      "priority": "medium",
+      "estimated_hours": 45
+    },
+    {
+      "skill": "Business Process Modeling",
+      "gap_recommendation": "Process modelling ensures alignment between business goals and technical solutions. SMARRTIF AI offers a Business Analysis Foundations course covering BPMN 2.0, swim-lane diagrams, and process optimisation techniques.",
+      "course_suggestion": "Coursera – Business Analytics Specialization (UPenn Wharton)",
+      "priority": "low",
+      "estimated_hours": 20
+    },
+    {
+      "skill": "Agile / Scrum",
+      "gap_recommendation": "Agile fluency is expected in most product and technology organisations. SMARRTIF AI includes Agile fundamentals in its Professional Skills track, covering sprint ceremonies, user stories, backlog refinement, and retrospectives.",
+      "course_suggestion": "Scrum.org – Scrum Guide (free) + Professional Scrum Master I (PSM I) prep",
+      "priority": "low",
+      "estimated_hours": 15
+    },
+    {
+      "skill": "Feature Engineering",
+      "gap_recommendation": "Feature engineering often has a larger impact on model performance than algorithm selection. SMARRTIF AI's ML Practitioner Workshop covers encoding strategies, interaction features, target encoding, and feature stores.",
+      "course_suggestion": "Kaggle – Feature Engineering Course (free)",
+      "priority": "high",
+      "estimated_hours": 20
+    },
+    {
+      "skill": "Data Modeling",
+      "gap_recommendation": "Robust data models are the foundation of scalable analytics. SMARRTIF AI's Data Architecture track covers dimensional modelling, star/snowflake schemas, data vault, and medallion architecture for lakehouses.",
+      "course_suggestion": "DataTalks.Club – Data Engineering Zoomcamp – Data Modelling module (free)",
+      "priority": "medium",
+      "estimated_hours": 25
+    },
+    {
+      "skill": "TypeScript",
+      "gap_recommendation": "TypeScript is now the default for serious JavaScript projects. SMARRTIF AI's Full-Stack Engineering Module covers TypeScript fundamentals, type narrowing, generics, and using it with modern frameworks.",
+      "course_suggestion": "Total TypeScript – Beginner TypeScript (Matt Pocock, free)",
+      "priority": "medium",
+      "estimated_hours": 20
+    },
+    {
+      "skill": "REST API Design",
+      "gap_recommendation": "Well-designed REST APIs are the backbone of distributed systems. SMARRTIF AI's Backend Engineering Workshop covers OpenAPI spec, versioning, authentication patterns, pagination, and error handling best practices.",
+      "course_suggestion": "Postman – API Fundamentals Student Expert (free)",
+      "priority": "medium",
+      "estimated_hours": 15
+    },
+    {
+      "skill": "Git",
+      "gap_recommendation": "Version control is the baseline expectation for every technical role. SMARRTIF AI's Developer Foundations module covers branching strategies, rebasing, pull request workflows, and GitOps patterns.",
+      "course_suggestion": "GitHub Skills – Introduction to GitHub (free)",
+      "priority": "low",
+      "estimated_hours": 8
+    },
+    {
+      "skill": "Time Series Forecasting",
+      "gap_recommendation": "Time series skills are in demand for finance, operations, and IoT roles. SMARRTIF AI's Applied Forecasting course covers ARIMA, Prophet, LSTM-based models, and evaluation with real-world datasets.",
+      "course_suggestion": "Nixtla – TimeGPT tutorials + statsforecast library docs (free)",
+      "priority": "medium",
+      "estimated_hours": 30
+    },
+    {
+      "skill": "Computer Vision",
+      "gap_recommendation": "Computer vision is driving automation in manufacturing, retail, and healthcare. SMARRTIF AI's CV Engineering Bootcamp covers image preprocessing, CNN architectures, transfer learning, and deploying models with ONNX.",
+      "course_suggestion": "fast.ai – Practical Deep Learning Part 1, Lessons 6–8 (free)",
+      "priority": "medium",
+      "estimated_hours": 40
+    },
+    {
+      "skill": "Infrastructure as Code",
+      "gap_recommendation": "IaC is a DevOps and MLOps baseline for reproducible environments. SMARRTIF AI's Platform Engineering track covers Terraform, Pulumi, and cloud-provider CDKs for provisioning repeatable infrastructure.",
+      "course_suggestion": "HashiCorp – Terraform Tutorials (free on developer.hashicorp.com)",
+      "priority": "medium",
+      "estimated_hours": 25
+    },
+    {
+      "skill": "NLP",
+      "gap_recommendation": "NLP skills bridge the gap between raw text and structured ML inputs. SMARRTIF AI's NLP Practitioner Programme covers text preprocessing, named entity recognition, sentiment analysis, and fine-tuning transformer models.",
+      "course_suggestion": "Hugging Face – NLP Course (free, official)",
+      "priority": "high",
+      "estimated_hours": 35
+    },
+    {
+      "skill": "Linux",
+      "gap_recommendation": "Linux fluency is required for cloud, data engineering, and MLOps workflows. SMARRTIF AI's Developer Foundations module covers shell scripting, cron jobs, file system navigation, process management, and SSH.",
+      "course_suggestion": "Linux Foundation – Introduction to Linux (LFS101, free on edX)",
+      "priority": "low",
+      "estimated_hours": 15
+    }
+  ],
+  "general_recommendations": {
+    "low_score": {
+      "message": "Your CV shows significant skill gaps for this role. SMARRTIF AI offers a structured upskilling pathway tailored to your profile. Consider our Role Readiness Programme for a guided 3–6 month development plan.",
+      "cta": "Book a free Skills Assessment Call with SMARRTIF AI"
+    },
+    "medium_score": {
+      "message": "You have a solid foundation but targeted upskilling could significantly boost your employability. SMARRTIF AI can help you close specific gaps with focused micro-courses and project-based learning.",
+      "cta": "Explore SMARRTIF AI's Targeted Skills Modules"
+    },
+    "high_score": {
+      "message": "Strong profile! To stand out further, consider advanced specialisations or certifications. SMARRTIF AI's Advanced Practitioner track can help you move into senior or lead roles.",
+      "cta": "Join SMARRTIF AI's Advanced Practitioner Track"
+    }
+  }
+}
