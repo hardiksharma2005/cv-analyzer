@@ -241,4 +241,4 @@ welcome as the job market evolves — no code changes required.
 
 © 2025 SMARRTIF AI. All rights reserved.
 
-*Built as an internship project by Kshitiz Sharma, AI Tool Developer Intern.*
+*Built as an internship project by Hardik Sharma, AI Tool Developer Intern.*
