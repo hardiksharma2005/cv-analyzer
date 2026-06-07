@@ -2,7 +2,7 @@
 ## Architecture, Third-Party Integrations & Scaling Roadmap
 
 **Document version:** 1.0  
-**Date:** June 2025  
+**Date:** June 2026  
 **Author:** SMARRTIF AI Engineering  
 **Status:** Design draft (internship submission)
 

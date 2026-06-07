@@ -9,7 +9,7 @@
 | **Company** | SMARRTIF AI |
 | **Role** | AI Tool Developer Intern |
 | **Intern Name** | Hardik Sharma |
-| **Submission Date** | June 2025 |
+| **Submission Date** | June 2026 |
 | **Technology Stack** | HTML5, CSS3, JavaScript, Python, Flask, spaCy, NLTK, scikit-learn, PyMuPDF |
 
 ---
